@@ -34,6 +34,7 @@ public class GUI extends Application
     private BorderPane generalLayout;
     private VBox cardBox;
     private Button add3Button;
+    private Button exitButton;
     private Pane statusPane;
 
     private final int DEF_CARD_VGAP = 20;
@@ -82,20 +83,16 @@ public class GUI extends Application
 
         Text text = new Text(0,35,"Game of Set");
         text.setFont(Font.font("Courier",FontWeight.BOLD,35));
+        text.setTranslateX(10);
 
         headerPane.getChildren().addAll(headerBackground,text);
 
         //MENU PANE
         menuPane = new Pane();
-        Rectangle menuBackground = new Rectangle(0,0,200,DEF_WINDOW_HEIGHT);
+        Rectangle menuBackground = new Rectangle(0,0,DEF_WINDOW_WIDTH,100);
         menuBackground.setFill(Color.LIGHTBLUE);
 
-
-        cardsRemaining = new Label(String.format("Cards remaining: %d", game.getDeck().getSize()));
-        cardsRemaining.setFont(Font.font("Courier", 18));
-        cardsRemaining.setTranslateY(DEF_WINDOW_HEIGHT-250);
-
-        add3Button = new Button("Add 3");
+        add3Button = new Button("Add 3 Cards");
         add3Button.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -104,6 +101,12 @@ public class GUI extends Application
                     currentNumCards += 3;
                     System.out.println(currentNumCards+" cards now on board.");
                     showGameBoard();
+
+                    //if we have now hit the limit
+                    if(currentNumCards >= DEF_MAX_CARDS){
+                        add3Button.setDisable(true);
+                    }
+
                 }
                 else{
                     System.out.println("Not allowed to add more cards");
@@ -112,7 +115,27 @@ public class GUI extends Application
             }
         });
 
-        menuPane.getChildren().addAll(menuBackground,add3Button, cardsRemaining);
+        exitButton = new Button("Quit Game");
+        exitButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+                System.exit(0);
+            }
+        });
+
+        add3Button.setTranslateX(10);
+        add3Button.setTranslateY(10);
+
+        exitButton.setTranslateX(10);
+        exitButton.setTranslateY(45);
+
+        cardsRemaining = new Label(String.format("%d cards left", game.getDeck().getSize()));
+        cardsRemaining.setFont(Font.font("Courier", 30));
+        cardsRemaining.setTranslateX(DEF_WINDOW_WIDTH/2 - 100);
+        cardsRemaining.setTranslateY(15);
+
+
+        menuPane.getChildren().addAll(menuBackground,add3Button, cardsRemaining,exitButton);
 
         //CARD GRID POSITIONING
         cardGrid.setHgap(DEF_CARD_HGAP); //positioning between the rows
@@ -120,7 +143,7 @@ public class GUI extends Application
         cardGrid.setPadding(new Insets(DEF_CARD_GRID_PADDING)); //padding around the entire cardGrid
 
         generalLayout.setTop(headerPane);
-        generalLayout.setLeft(menuPane);
+        generalLayout.setBottom(menuPane);
         generalLayout.setCenter(cardGrid);
 
         this.showGameBoard();
@@ -144,12 +167,18 @@ public class GUI extends Application
                 //pane.getChildren().add(cardPane);
             }
         }
+
+        //if the number of cards somehow becomes less than the default, show the button again
+        if(currentNumCards < DEF_MAX_CARDS){
+            add3Button.setDisable(false);
+        }
+
         this.updateCardsRemaining();
         //menuPane.getChildren().add(statusPane);
         //showStatusPane();
     }
     public void updateCardsRemaining(){
-        cardsRemaining.setText(String.format("Cards remaining: %d", game.getDeck().getSize()));
+        cardsRemaining.setText(String.format("%d cards left", game.getDeck().getSize()));
     }
     private void cardClickEventHandler(MouseEvent event){
 

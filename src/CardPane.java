@@ -73,7 +73,6 @@ public class CardPane extends VBox{
         this.currentRow = boardSquare.getRow();
 
 
-
         ArrayList shapePositions = new ArrayList<Integer>();
 
         this.setBackground(new Background(new BackgroundFill(DEF_CARD_BG_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -86,7 +85,7 @@ public class CardPane extends VBox{
 
         this.setStyle(cssLayout);
 
-        this.setAlignment(Pos.BOTTOM_CENTER);
+        this.setAlignment(Pos.CENTER);
         this.setPrefHeight(DEF_CARD_HEIGHT);
         this.setPrefWidth(DEF_CARD_WIDTH);
         this.setSpacing(1);
