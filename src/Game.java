@@ -128,9 +128,18 @@ public class Game {
 
     }
 
+    /**
+     * Get the board
+     * @return the board
+     */
     public Board getBoard(){
         return b;
     }
+
+    /**
+     * Get the deck
+     * @return the deck
+     */
     public Deck getDeck(){
         return d;
     }

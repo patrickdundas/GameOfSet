@@ -84,6 +84,10 @@ public class BoardSquare {
         selected=newSelection;
     }
 
+    /**
+     * The tostring for getting a boardsquare as a string
+     * @return the boardsquare's card's string
+     */
     @Override
     public String toString(){
         return c.toString();

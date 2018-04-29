@@ -68,6 +68,10 @@ public class Deck {
         return deck.size() == 0;
     }
 
+    /**
+     * Get the size of the deck
+     * @return the size of the deck
+     */
     public int getSize(){
 
         return deck.size();

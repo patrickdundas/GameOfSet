@@ -14,8 +14,14 @@ import javafx.scene.Node;
 
 import java.util.ArrayList;
 
+
+/**
+ * CardPane assembles pieces of a card to create a visual element that is displayed by the gui
+ * Uses JavaFX VBox
+ */
 public class CardPane extends VBox{
 
+    //card attributes
     private Card.Color color;
     private Card.Fill fill;
     private Card.Number number;
@@ -28,7 +34,7 @@ public class CardPane extends VBox{
     //private int newCenterY;
 
 
-
+    //CONSTANTS
     private final int DEF_CARD_HEIGHT = 225;
     private final int DEF_CARD_WIDTH = 150;
 
@@ -52,17 +58,23 @@ public class CardPane extends VBox{
 
     private final int DEF_SHAPE_STROKE_WIDTH = 3;
 
+    //the currently accessed boardsquare
     BoardSquare boardSquare;
 
 
-
-
+    /**
+     * Create a cardpane from a boardsquare
+     * @param boardSquare the boardsquare to read data from
+     */
     public CardPane(BoardSquare boardSquare){
 
         super();
 
-        //GridPane gp = new GridPane();
+
+        //save the current boardsquare to the class scope
         this.boardSquare = boardSquare;
+
+        //get the data from the boardsquare and card
         Card card = boardSquare.getCard();
         this.color = card.getColor();
         this.fill = card.getFill();
@@ -72,19 +84,20 @@ public class CardPane extends VBox{
         this.currentCol = boardSquare.getCol();
         this.currentRow = boardSquare.getRow();
 
-
+        //positioning for shapes in the card
         ArrayList shapePositions = new ArrayList<Integer>();
 
+        //set the card background
         this.setBackground(new Background(new BackgroundFill(DEF_CARD_BG_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
+        //css for card
         String cssLayout = "-fx-border-color: "+DEF_CARD_BORDER_COLOR+";\n" +
                 "-fx-border-insets: 0;\n" +
                 "-fx-border-width: "+DEF_CARD_BORDER_WIDTH+";\n" +
                 "-fx-border-style: solid;\n";
-
-
         this.setStyle(cssLayout);
 
+        //card height, alignment, spacing, etc.
         this.setAlignment(Pos.CENTER);
         this.setPrefHeight(DEF_CARD_HEIGHT);
         this.setPrefWidth(DEF_CARD_WIDTH);
@@ -96,11 +109,14 @@ public class CardPane extends VBox{
         Color newFillOutline;
         int newShapeQuantity;
 
-        int testposition = -10;
+        //int testposition = -10;
+
+        //detect the number of shapes from the card
+        //save as an integer and save shape positioning
         switch(this.number){
             case ONE:
                 newShapeQuantity = 1;
-                shapePositions.add(shapePositions.add(testposition));
+                shapePositions.add(shapePositions.add(0));
                 break;
             case TWO:
                 newShapeQuantity = 2;
@@ -121,6 +137,7 @@ public class CardPane extends VBox{
                 shapePositions.add(0);
         }
 
+        //detect card color and set the newFillColor
         switch(this.color){
             case GREEN:
                 newFillColor = Color.GREEN;
@@ -135,6 +152,7 @@ public class CardPane extends VBox{
                 newFillColor = Color.TRANSPARENT;
         }
 
+        //detect the card fill type and set newFillPattern and newFillOutline
         switch(this.fill){
             case OUTLINE:
                 newFillPattern = Color.TRANSPARENT;
@@ -153,7 +171,7 @@ public class CardPane extends VBox{
                 newFillOutline = Color.TRANSPARENT;
         }
 
-        //now draw the shape (loop through the number of shapes so that the right amount are drawn)
+        //now generate the shape (loop through the number of shapes so that the right amount are drawn)
         Node newShape;
         for(int i = 0; i < newShapeQuantity; i++) {
             switch(this.shape){
@@ -179,6 +197,13 @@ public class CardPane extends VBox{
 
     }
 
+    /**
+     * Generate an ellipse with given position, pattern, and filloutline
+     * @param newShapePosition the new position for the ellipse
+     * @param newFillPattern the nwe pattern for the ellipse
+     * @param newFillOutline the new fill outline for the ellipse
+     * @return the ellipse
+     */
     public Ellipse drawOval(int newShapePosition,Paint newFillPattern, Color newFillOutline){
 
         Ellipse e1 = new Ellipse(DEF_CARD_WIDTH/2,newShapePosition,DEF_OVAL_WIDTH,DEF_OVAL_HEIGHT);
@@ -189,6 +214,13 @@ public class CardPane extends VBox{
         return e1;
     }
 
+    /**
+     * Generate a triangle with given position, pattern, and filloutline
+     * @param newShapePosition the new position for the triangle
+     * @param newFillPattern the new pattern for the triangle
+     * @param newFillOutline the new fill outline for the triangle
+     * @return the triangle
+     */
     public Polygon drawTriangle(int newShapePosition, Paint newFillPattern, Color newFillOutline){
         /*int newCenterX = newXPosition + (DEF_CARD_WIDTH / 2);
         int newCenterY;
@@ -206,6 +238,13 @@ public class CardPane extends VBox{
         return triangle1;
     }
 
+    /**
+     * Generate a diamond with given position, pattern, and filloutline
+     * @param newShapePosition the new position for the diamond
+     * @param newFillPattern the nwe pattern for the diamond
+     * @param newFillOutline the new fill outline for the diamond
+     * @return the diamond
+     */
     public Polygon drawDiamond(int newShapePosition, Paint newFillPattern, Color newFillOutline){
 
         Polygon diamond1 = new Polygon();
@@ -224,6 +263,11 @@ public class CardPane extends VBox{
         return diamond1;
     }
 
+    /**
+     * Generate a new stripe fill for a shape
+     * @param newColor the color for this fill
+     * @return an Image object for the stripe fill
+     */
     private Image drawNewStripeFill(Color newColor){
         Pane drawPane = new Pane();
         drawPane.setPrefSize(2,2);
@@ -237,10 +281,18 @@ public class CardPane extends VBox{
 
     }
 
+    /**
+     * Get the currently selected boardsquare
+     * @return the boardsquare
+     */
     public BoardSquare getBoardSquare(){
         return boardSquare;
     }
 
+    /**
+     * Set the fill for the cardpane
+     * @param newFill the new fill of type Card.Fill
+     */
     public void setFill(Card.Fill newFill){
         this.fill = newFill;
     }
